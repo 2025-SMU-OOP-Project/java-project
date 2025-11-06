@@ -1,2 +1,2 @@
-# java-project
+# vampire_survivors
 project

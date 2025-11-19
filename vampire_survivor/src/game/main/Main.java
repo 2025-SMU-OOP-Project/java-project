@@ -1,8 +1,7 @@
-package game;
+package game.main;
 
 
 import javax.swing.SwingUtilities;
-import game.screen.MainScreen;  //MainScreen class 가져옴
 
 public class Main {
 	public static void main(String[] args) {

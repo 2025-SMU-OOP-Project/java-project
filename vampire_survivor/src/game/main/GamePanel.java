@@ -129,6 +129,15 @@ public class GamePanel extends JPanel {
             updateSpawning();
             updateMonsters();
             
+            for (int i = 0; i< monsters.size(); i++) {
+            	Monster monster = monsters.get(i);
+            	monster.update(player.worldX, player.worldY);
+            	
+            	if (player.getBounds().intersects(monster.getBounds())) {
+            		player.takeDamage(10);
+            	}
+            }
+            
         }
     }
     // 몬스터 스폰 타이머 업데이트

@@ -38,4 +38,11 @@ public class Monster {
             g.drawImage(image, screenX, screenY, width, height, null);
         }
     }
+    
+    
+    public Rectangle getBounds() {
+    	return new Rectangle(worldX, worldY, width, height);
+    }
+    
+    public int getDamage() { return 10; }
 }

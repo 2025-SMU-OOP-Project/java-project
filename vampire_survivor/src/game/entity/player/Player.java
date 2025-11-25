@@ -10,7 +10,7 @@
     GamePanel gp;
     KeyHandler keyH;
 
-    // ⭐ 월드 좌표 (게임 맵 상의 진짜 위치)
+    // 월드 좌표 (게임 맵 상의 진짜 위치)
     public int worldX, worldY;
     public int speed;
     
@@ -23,6 +23,15 @@
     // 스탯
     private int maxHp = 100;
     private int currentHp = 100;
+    private int exp = 0;
+    private int level = 1;
+    private int nextLevelExp = 50; //다음레벨까지 경험치
+    
+    //충돌 무적 쿨타임
+    private boolean isInvincible = false;
+    private int invincibleCounter = 0;
+    private final int INVINCIBLE_TIME = 60;  //1초 무적
+    
     
     private Image image;
 
@@ -54,9 +63,19 @@
         if (keyH.leftPressed)  worldX -= speed;
         if (keyH.rightPressed) worldX += speed;
         
-        // (참고: 이렇게 하면 플레이어가 위로 가면 worldY는 줄어듭니다)
-    }
+    
 
+    
+    	// 무적 후 해제 코드
+    	if (isInvincible) {
+    		invincibleCounter++;
+    		if (invincibleCounter > INVINCIBLE_TIME) {
+    			isInvincible = false;
+    			invincibleCounter = 0;
+    		}
+    	}
+    }
+    	
     public void draw(Graphics g) {
         // ⭐ 그릴 때는 worldX, worldY가 아니라 '고정된 screenX, screenY'에 그립니다.
         if (image != null) {
@@ -67,8 +86,50 @@
         // g.setColor(Color.WHITE);
         // g.drawString("World: " + worldX + "," + worldY, screenX, screenY - 10);
     }
+    
+    //충돌 감지 영역 반환
+    public Rectangle getBounds() {
+    	return new Rectangle(worldX, worldY, width, height);
+    }
+    
+    //데미지 받는 메서드
+    public void takeDamage(int damage) {
+    	if(!isInvincible) {
+    		currentHp -= damage;
+    		isInvincible = true;
+    		
+    		if (currentHp <= 0 ) {
+    			currentHp = 0;
+    			
+    			System.out.println("GAME OVER");
+    		}
+    	}
+    }
+    
+    
+    public void gainExp(int amount) {
+    	exp += amount;
+    	if (exp >= nextLevelExp) {
+    		levelUp();
+    	}
+    }
+    
+    private void levelUp() {
+    	level++;
+    	exp -= nextLevelExp;
+    	nextLevelExp = (int)(nextLevelExp * 1.2);
+    	maxHp += 10;
+    	currentHp = maxHp;
+    }
+    
+    
+    
 
     // Getter
     public int getCurrentHp() { return currentHp; }
     public int getMaxHp() { return maxHp; }
+    public int getExp() { return exp; }
+    public int getLevel() { return level; }
 }
+	
+	
